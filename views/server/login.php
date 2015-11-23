@@ -18,8 +18,8 @@ $this->title = 'Login';
       <div class="panel">
         <div class="panel-body">
           <div class="brand">
-            <img class="brand-img" src="../../assets/images/logo-blue.png" alt="...">
-            <h2 class="brand-text font-size-18">Mkit App</h2>
+            <img class="brand-img" src="../../web/images/logo.svg" alt="...">
+            <h2 class="brand-text font-size-18">Server Health App</h2>
           </div>
 
 
