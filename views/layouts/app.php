@@ -305,7 +305,7 @@ DashboardAsset::register($this);
               <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
               data-animation="scale-up" role="button">
                 <span class="avatar avatar-online">
-                  <img src="../../assets/portraits/5.jpg" alt="...">
+                  <!-- <img src="../../assets/portraits/5.jpg" alt="..."> -->
                   <i></i>
                 </span>
               </a>
