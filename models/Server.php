@@ -98,8 +98,7 @@ class Server extends Model
         date_default_timezone_set('Etc/GMT+4');
         $now = new \DateTime;
         $ago = new \DateTime($datetime);
-        print_r($now);
-        exit;
+      
         $diff = $now->diff($ago);
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
