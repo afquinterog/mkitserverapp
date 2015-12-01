@@ -40,10 +40,19 @@ class Server extends Model
     */
     public function getServerLastMetrics($server){
         $db = Yii::$app->db;
-        $cmd = $db->createCommand('SELECT * FROM metrics WHERE server = :server ORDER BY date DESC ')
-                  ->bindValue(':server', $server->id );
+        $columns = "";
+        $sql = "SELECT id, server, cpu, memory, disk , DATE_SUB(date, INTERVAL 4 HOUR) date  
+                FROM metrics 
+                WHERE server = :server ORDER BY date DESC ";
+        $cmd = $db->createCommand( $sql )
+                  ->bindValues( [':server' => $server->id ] );
+      
         $cmd->fetchMode = \PDO::FETCH_OBJ ; 
         $metrics = $cmd->queryOne();
+        
+        if( isset($metrics->date)){
+            $metrics->date2 = $this->timeAgo($metrics->date);
+        }
         $server->metrics = $metrics;
 
     }
@@ -74,6 +83,54 @@ class Server extends Model
       } else {
         return 'Private';        
       }
+    }
+
+    /**
+     * Time Ago
+     *
+     * @param $datetime mysql datetime format
+     * @param $full - return full datetime or not
+     *           
+     * @return datetime - time ago 
+     */
+    public static function timeAgo($datetime, $full = false)
+    {   
+        date_default_timezone_set('America/New_York');
+        $now = new \DateTime;
+        $ago = new \DateTime($datetime);
+        $diff = $now->diff($ago);
+        $diff->w = floor($diff->d / 7);
+        $diff->d -= $diff->w * 7;
+
+        $string = [
+            'y' => 'Year',
+            'm' => 'Month',
+            'w' => 'Week',
+            'd' => 'Day',
+            'h' => 'Hour',
+            'i' => 'Minute',
+            's' => 'Second',
+        ];
+
+        foreach ($string as $k => &$v) 
+        {
+            if ($diff->$k) 
+            {
+                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? ' ' : '');
+            } 
+            else 
+            {
+                unset($string[$k]);
+            }
+        }
+
+        if ( ! $full)
+        {
+            $string = array_slice($string, 0, 1);   
+        } 
+
+        return $string ? implode(', ', $string) . '' : 'just now';
+
     }
 }
 ?>

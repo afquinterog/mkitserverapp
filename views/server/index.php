@@ -37,6 +37,7 @@
 									$memory = isset($server->metrics->memory) ? $server->metrics->memory : 0 ;
 									$disk   = isset($server->metrics->disk) ? $server->metrics->disk : 0 ;
 									$date   = isset($server->metrics->date) ? $server->metrics->date : "";
+									$date2   = isset($server->metrics->date) ? $server->metrics->date2 : "";
 									$description = $server->description;
 									$host = $server->host;
 									$cpuColor    = ($cpu >=0 && $cpu <= 50) ? "primary" : ( ($cpu > 50 && $cpu <= 75) ?  "warning" : "danger" );  
@@ -72,7 +73,7 @@
 							        <div style="width: <?php echo $disk; ?>%" class="progress-bar progress-bar-<?php echo $diskColor; ?>"></div>
 							      </div>
 							    </td>
-							    <td><?php echo $date; ?></td>
+							    <td title="<?php echo $date; ?>"><?php echo $date2; ?></td>
 							    <td class="text-nowrap">
 							      <button data-original-title="More info" data-toggle="tooltip" 
 							      		  class="btn btn-sm btn-icon btn-flat btn-default" type="button">
