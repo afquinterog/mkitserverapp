@@ -95,9 +95,11 @@ class Server extends Model
      */
     public static function timeAgo($datetime, $full = false)
     {   
-        date_default_timezone_set('America/New_York');
+        date_default_timezone_set('Etc/GMT+4');
         $now = new \DateTime;
         $ago = new \DateTime($datetime);
+        print_r($now);
+        exit;
         $diff = $now->diff($ago);
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
