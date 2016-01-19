@@ -26,6 +26,17 @@ $this->title = 'Login';
           <form method="post" action="<?php echo Url::to(['server/login']); ?>" enctype="multipart/form-data"> 
             <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
 
+            <?php if( isset($msg) && $msg != "" ) : ?>
+              <div role="alert" class="alert dark alert-danger alert-dismissible">
+                    <button aria-label="Close" data-dismiss="alert" class="close" type="button">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                    <?php echo $msg; ?>
+              </div>
+            <?php endif; ?>
+
+            
+
             <div class="form-group form-material floating">
               <input type="text" class="form-control" name="Login[username]" />
               <label class="floating-label">username</label>

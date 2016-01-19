@@ -87,6 +87,7 @@ class ServerController extends Controller
         //print_r(Yii::$app->request->post());
         //exit;
         $data = $model->load(Yii::$app->request->post());
+        $msg = "";
         //print_r($model);
         if (  $model->login()) {
             // Get the actual logged user
@@ -99,9 +100,12 @@ class ServerController extends Controller
             //return $this->actionIndex();
             $this->redirect(array('server/index')); 
         }
+        else{
+            $msg = "Please verify  user and password.";
+        }
 
         $this->layout = 'login';
-        return $this->render('login', ['model' => $model ]);
+        return $this->render('login', array( 'model' => $model, 'msg' => $msg  ) );
     }
 
     public function actionLogout(){
