@@ -4,6 +4,7 @@
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
+use Yii;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
@@ -18,7 +19,7 @@ $this->title = 'Login';
       <div class="panel">
         <div class="panel-body">
           <div class="brand">
-            <img class="brand-img" src="../../web/images/logo.svg" alt="...">
+            <img class="brand-img" src="<?php echo Url::base(true); ?>/images/logo.svg" alt="...">
             <h2 class="brand-text font-size-18">Server Health App</h2>
           </div>
 
