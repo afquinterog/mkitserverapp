@@ -40,7 +40,7 @@
 									$date   = isset($server->metrics->date) ? $server->metrics->date : "";
 									$date2   = isset($server->metrics->date) ? $server->metrics->date2 : "";
 									$description = $server->description;
-									$connections = = isset($server->metrics->connections) ? $server->metrics->connections : 0;
+									$connections = isset($server->metrics->connections) ? $server->metrics->connections : 0;
 									$host = $server->host;
 									$cpuColor    = ($cpu >=0 && $cpu <= 50) ? "primary" : ( ($cpu > 50 && $cpu <= 75) ?  "warning" : "danger" );  
 									$memoryColor = ($memory >=0 && $memory <= 50) ? "primary" : ( ($memory > 50 && $memory <= 75) ?  "warning" : "danger" );
