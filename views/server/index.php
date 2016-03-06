@@ -1,6 +1,7 @@
  
 <?php
   use yii\helpers\Html;
+  use yii\helpers\Url;
 
   $this->title = "Mkit App :: Dashboard";
 ?>
@@ -39,6 +40,7 @@
 									$date   = isset($server->metrics->date) ? $server->metrics->date : "";
 									$date2   = isset($server->metrics->date) ? $server->metrics->date2 : "";
 									$description = $server->description;
+									$connections = = isset($server->metrics->connections) ? $server->metrics->connections : 0;
 									$host = $server->host;
 									$cpuColor    = ($cpu >=0 && $cpu <= 50) ? "primary" : ( ($cpu > 50 && $cpu <= 75) ?  "warning" : "danger" );  
 									$memoryColor = ($memory >=0 && $memory <= 50) ? "primary" : ( ($memory > 50 && $memory <= 75) ?  "warning" : "danger" );
@@ -49,7 +51,7 @@
 							    <td>
 							    	<div class="tooltip-primary" data-original-title="<?php echo $description . " / " . $host ; ?>" 
 							      	   data-placement="top" data-toggle="tooltip" data-trigger="click"> 
-							    		<?php echo $server->name; ?>
+							    		<?php echo $server->name . " -> [" . $connections . "]" ; ?>
 							    	</div>
 							    </td>
 							    <td>
@@ -75,10 +77,10 @@
 							    </td>
 							    <td title="<?php echo $date; ?>"><?php echo $date2; ?></td>
 							    <td class="text-nowrap">
-							      <button data-original-title="More info" data-toggle="tooltip" 
-							      		  class="btn btn-sm btn-icon btn-flat btn-default" type="button">
+							      <a data-original-title="More info" data-toggle="tooltip" 
+							      		  class="btn btn-sm btn-icon btn-flat btn-default" type="button" href="<?php echo Url::to(['server/detail']); ?>">
 							        <i aria-hidden="true" class="icon wb-wrench"></i>
-							      </button>
+							      </a>
 							      <button data-original-title="Delete Server" data-toggle="tooltip" 
 							      		  class="btn btn-sm btn-icon btn-flat btn-default" type="button">
 							        <i aria-hidden="true" class="icon wb-close"></i>

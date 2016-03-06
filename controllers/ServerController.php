@@ -33,6 +33,27 @@ class ServerController extends Controller
         
     }
 
+     /**
+    * List actual servers in the monitor app
+    */
+    public function actionDetail(){
+
+        $user = Yii::$app->user->getIdentity();
+        if(isset($user->id) ){
+            $model = new Server;
+            //print_r( Yii::$app->user->getIdentity() );
+
+            $servers = $model->getServers();
+            $this->layout = 'app';
+            return $this->render('detail', array('servers' => $servers, 'app' => Yii::$app, 'user' => $user ) );    
+        }
+        else{
+             return $this->actionLoginform();
+        }
+
+        
+    }
+
     public function actionCreate()
     {
         //$model = new Status;

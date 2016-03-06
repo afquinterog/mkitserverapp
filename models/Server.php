@@ -41,7 +41,7 @@ class Server extends Model
     public function getServerLastMetrics($server){
         $db = Yii::$app->db;
         $columns = "";
-        $sql = "SELECT id, server, cpu, memory, disk , DATE_SUB(date, INTERVAL 4 HOUR) date  
+        $sql = "SELECT id, server, cpu, memory, disk , connections , DATE_SUB(date, INTERVAL 4 HOUR) date  
                 FROM metrics 
                 WHERE server = :server ORDER BY date DESC ";
         $cmd = $db->createCommand( $sql )
