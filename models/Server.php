@@ -214,9 +214,9 @@ class Server extends Model
                 $emails = $this->getThresholdNotificationEmails();
                 foreach($emails as $item){
                     $msg = "sample";
-                    $sender = "monitor@mkitdigital.com";
+                    //$sender = "monitor@mkitdigital.com";
                     echo "Sending message {$item->email}";
-                    mail( $item->email,"Mkit Server App",$msg, "From:" . $sender ); 
+                    mail( $item->email,"Mkit Server App",$msg); 
                 }
                 
             }
