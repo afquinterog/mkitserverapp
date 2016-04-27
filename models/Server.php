@@ -211,14 +211,30 @@ class Server extends Model
             $this->getServerThresholds( $server ); 
             if( isset($server->warnings) && count($server->warnings) > 0 ){
                 //Send email message
-                $msg = "sample";
-                echo "Sending message";
-                mail("andresquintero@mkitkdigital.com","Mkit Server App",$msg);
+                $emails = $this->getThresholdNotificationEmails();
+                foreach($emails as $item){
+                    $msg = "sample";
+                    echo "Sending message {$item->email}";
+                    mail( $item->email,"Mkit Server App",$msg); 
+                }
+                
             }
 
             //$this->getServerThresholdConnections($server);
         }
         return $servers;
+    }
+
+
+    /**
+    * Get all the email notifications for server Thresholds 
+    */
+    public function getThresholdNotificationEmails(){
+        $db = Yii::$app->db;
+        $cmd = $db->createCommand('SELECT * FROM server_notifications');
+        $cmd->fetchMode = \PDO::FETCH_OBJ ; 
+        $notifications = $cmd->queryAll();
+        return $notifications;
     }
 }
 ?>
