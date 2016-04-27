@@ -45,13 +45,15 @@
 									$cpuColor    = ($cpu >=0 && $cpu <= 50) ? "primary" : ( ($cpu > 50 && $cpu <= 75) ?  "warning" : "danger" );  
 									$memoryColor = ($memory >=0 && $memory <= 50) ? "primary" : ( ($memory > 50 && $memory <= 75) ?  "warning" : "danger" );
 									$diskColor   = ($disk >=0 && $disk <= 50) ? "primary" : ( ($disk > 50 && $disk <= 75) ?  "warning" : "danger" );
+
+									$connClass =  "badge badge-" . ( isset($server->connections) ? $server->connections : "info");
 							?>
 
 							<tr>
 							    <td>
 							    	<div class="tooltip-primary" data-original-title="<?php echo $description . " / " . $host ; ?>" 
 							      	   data-placement="top" data-toggle="tooltip" data-trigger="click"> 
-							    		<?php echo $server->name . " -> [" . $connections . "]" ; ?>
+							    		<?php echo $server->name . "  <span class='$connClass'>" . $connections . "</span>" ; ?>
 							    	</div>
 							    </td>
 							    <td>

@@ -20,8 +20,6 @@ class ServerController extends Controller
         $user = Yii::$app->user->getIdentity();
         if(isset($user->id) ){
             $model = new Server;
-            //print_r( Yii::$app->user->getIdentity() );
-
             $servers = $model->getServers();
             $this->layout = 'app';
             return $this->render('index', array('servers' => $servers, 'app' => Yii::$app, 'user' => $user ) );    
@@ -29,8 +27,6 @@ class ServerController extends Controller
         else{
              return $this->actionLoginform();
         }
-
-        
     }
 
      /**
@@ -134,6 +130,17 @@ class ServerController extends Controller
         Yii::$app->user->logout();
         return $this->actionLoginform();
         //return $this->render('login', ['model' => $model, ]);
+    }
+
+    /**
+    * Cron to review server thresholds
+    */
+    public function actionCron(){
+
+        $model = new Server;
+        $servers = $model->cron();
+        $this->layout = 'app';
+        return "";   
     }
 }
 ?> 

@@ -31,11 +31,13 @@ class Server extends Model
         foreach($servers as $server){
             //print_r($server);
             $this->getServerLastMetrics( $server );
+            //$this->getServerThresholds( $server ); 
+            $this->getServerThresholdConnections($server);
         }
         return $servers;
     }
 
-     /**
+    /**
     * Get last information reported by  the server 
     */
     public function getServerLastMetrics($server){
@@ -54,7 +56,68 @@ class Server extends Model
             $metrics->date2 = $this->timeAgo($metrics->date);
         }
         $server->metrics = $metrics;
+    }
 
+     /**
+    * Get server thresholds
+    */
+    public function getServerThresholds( $server ){
+        $db = Yii::$app->db;
+        $columns = "";
+        $sql = "SELECT id, metric, s.limit , message
+                FROM server_thresholds as s
+                WHERE server = :server ";
+        $cmd = $db->createCommand( $sql )
+                  ->bindValues( [':server' => $server->id ] );
+      
+        $cmd->fetchMode = \PDO::FETCH_OBJ ; 
+        $thresholds = $cmd->queryAll();
+    
+        //Array ( [0] => stdClass Object ( [id] => 1 [metric] => connections [limit] => 150 
+        //[message] => SERVER_VALUE has VALUE connections and reached the maximun connections threshold. ) ) 
+        $server->thresholds = $thresholds;
+
+        //Check if we need to apply a threshold
+        foreach ($server->thresholds as $threshold ) {
+            $metric = $threshold->metric;
+            if(isset($server->metrics->$metric)){
+                $value = $server->metrics->$metric;
+                if( $value > $threshold->limit ){
+                    $msg = str_replace("SERVER_VALUE", $server->name, $threshold->message);
+                    $msg = str_replace("ACTUAL_VALUE", $value, $msg);
+                    $server->warnings[] = $msg;
+                }    
+            }
+            
+        }
+    }
+
+
+     /**
+    * Get server thresholds connections to update the gui
+    */
+    public function getServerThresholdConnections( $server ){
+        $db = Yii::$app->db;
+        $columns = "";
+        $sql = "SELECT id, metric, s.limit , message
+                FROM server_thresholds as s
+                WHERE server = :server and metric='connections' ";
+        $cmd = $db->createCommand( $sql )
+                  ->bindValues( [':server' => $server->id ] );
+      
+        $cmd->fetchMode = \PDO::FETCH_OBJ ; 
+        $threshold = $cmd->queryOne();
+    
+        $server->connections = "info";
+        if( isset($threshold->limit) && isset($server->metrics->connections)){
+
+            if( $server->metrics->connections > $threshold->limit ){
+                $server->connections = "danger";
+            }   
+            else if( $server->metrics->connections + 50 > $threshold->limit ){
+                $server->connections = "warning";
+            }
+        }
     }
 
 
@@ -93,8 +156,7 @@ class Server extends Model
      *           
      * @return datetime - time ago 
      */
-    public static function timeAgo($datetime, $full = false)
-    {   
+    public static function timeAgo($datetime, $full = false){   
         date_default_timezone_set('Etc/GMT+4');
         $now = new \DateTime;
         $ago = new \DateTime($datetime);
@@ -132,6 +194,31 @@ class Server extends Model
 
         return $string ? implode(', ', $string) . '' : 'just now';
 
+    }
+
+    /**
+    * Execute the server thresholds crons
+    */
+    public function cron(){
+        $db = Yii::$app->db;
+        $cmd = $db->createCommand('SELECT * FROM servers');
+        $cmd->fetchMode = \PDO::FETCH_OBJ ; 
+        $servers = $cmd->queryAll();
+      
+        foreach($servers as $server){
+           
+            $this->getServerLastMetrics( $server );
+            $this->getServerThresholds( $server ); 
+            if( isset($server->warnings) && count($server->warnings) > 0 ){
+                //Send email message
+                $msg = "sample";
+                echo "Sending message";
+                mail("andresquintero@mkitkdigital.com","Mkit Server App",$msg);
+            }
+
+            //$this->getServerThresholdConnections($server);
+        }
+        return $servers;
     }
 }
 ?>
