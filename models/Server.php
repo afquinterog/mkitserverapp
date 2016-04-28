@@ -219,6 +219,13 @@ class Server extends Model
                 // Get email template
 
                 $template = file_get_contents( Url::base(true) . "/mail/email.html");
+
+                //Get email headers
+                $headers = "From: servermonitor@mkitdigital.com \r\n";
+                //$headers .= "CC: susan@example.com\r\n";
+                $headers .= "MIME-Version: 1.0\r\n";
+                $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
                 //Send email message
                 $emails = $this->getThresholdNotificationEmails();
                 foreach($emails as $item){
@@ -226,7 +233,7 @@ class Server extends Model
                     $template = str_replace("SERVER_DATA", $msg, $template );
                     echo "Sending message {$item->email}";
                     print_r($template);
-                    mail( $item->email,"Mkit Server App", $template ); 
+                    mail( $item->email,"Mkit Server App", $template, $headers ); 
                 }
                 
             }
