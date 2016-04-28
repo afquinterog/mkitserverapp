@@ -210,13 +210,17 @@ class Server extends Model
             $this->getServerLastMetrics( $server );
             $this->getServerThresholds( $server ); 
             if( isset($server->warnings) && count($server->warnings) > 0 ){
+                // Got the message
+                $msg = 
+                foreach($server->warnings as $warning){
+                    $msg = $msg . $warning . "<br/>";
+                }
                 //Send email message
                 $emails = $this->getThresholdNotificationEmails();
                 foreach($emails as $item){
-                    $msg = "sample";
                     //$sender = "monitor@mkitdigital.com";
                     echo "Sending message {$item->email}";
-                    mail( $item->email,"Mkit Server App",$msg); 
+                    mail( $item->email,"Mkit Server App", $msg); 
                 }
                 
             }
