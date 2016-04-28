@@ -211,7 +211,7 @@ class Server extends Model
             $this->getServerThresholds( $server ); 
             if( isset($server->warnings) && count($server->warnings) > 0 ){
                 // Got the message
-                $msg = 
+                $msg = "";
                 foreach($server->warnings as $warning){
                     $msg = $msg . $warning . "<br/>";
                 }
