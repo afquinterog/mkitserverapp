@@ -4,6 +4,7 @@ namespace app\models;
  
 use Yii;
 use yii\base\Model;
+use yii\helpers\Url;
  
 class Server extends Model
 {
@@ -215,12 +216,17 @@ class Server extends Model
                 foreach($server->warnings as $warning){
                     $msg = $msg . $warning . "<br/>";
                 }
+                // Get email template
+
+                $template = file_get_contents( Url::base(true) . "/mail/email.html");
                 //Send email message
                 $emails = $this->getThresholdNotificationEmails();
                 foreach($emails as $item){
                     //$sender = "monitor@mkitdigital.com";
+                    $template = str_replace("SERVER_DATA", $msg, $template );
                     echo "Sending message {$item->email}";
-                    mail( $item->email,"Mkit Server App", $msg); 
+                    print_r($template);
+                    mail( $item->email,"Mkit Server App", $template ); 
                 }
                 
             }
