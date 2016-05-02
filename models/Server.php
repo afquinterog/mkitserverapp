@@ -44,7 +44,7 @@ class Server extends Model
     public function getServerLastMetrics($server){
         $db = Yii::$app->db;
         $columns = "";
-        $sql = "SELECT id, server, cpu, memory, disk , connections , DATE_SUB(date, INTERVAL 4 HOUR) date  
+        $sql = "SELECT id, server, cpu, memory, disk , connections, ip , DATE_SUB(date, INTERVAL 4 HOUR) date  
                 FROM metrics 
                 WHERE server = :server ORDER BY date DESC ";
         $cmd = $db->createCommand( $sql )
@@ -94,7 +94,7 @@ class Server extends Model
     }
 
 
-     /**
+    /**
     * Get server thresholds connections to update the gui
     */
     public function getServerThresholdConnections( $server ){
@@ -117,6 +117,33 @@ class Server extends Model
             }   
             else if( $server->metrics->connections + 50 > $threshold->limit ){
                 $server->connections = "warning";
+            }
+        }
+    }
+
+     /**
+    * Get server thresholds ips to update the gui
+    */
+    public function getServerThresholdIps( $server ){
+        $db = Yii::$app->db;
+        $columns = "";
+        $sql = "SELECT id, metric, s.limit , message
+                FROM server_thresholds as s
+                WHERE server = :server and metric='ips' ";
+        $cmd = $db->createCommand( $sql )
+                  ->bindValues( [':server' => $server->id ] );
+      
+        $cmd->fetchMode = \PDO::FETCH_OBJ ; 
+        $threshold = $cmd->queryOne();
+    
+        $server->ip = "info";
+        if( isset($threshold->limit) && isset($server->metrics->ips)){
+
+            if( $server->metrics->ips > $threshold->limit ){
+                $server->ip = "danger";
+            }   
+            else if( $server->metrics->ips + 20 > $threshold->limit ){
+                $server->ip = "warning";
             }
         }
     }

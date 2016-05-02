@@ -41,19 +41,24 @@
 									$date2   = isset($server->metrics->date) ? $server->metrics->date2 : "";
 									$description = $server->description;
 									$connections = isset($server->metrics->connections) ? $server->metrics->connections : 0;
+									$ip = isset($server->metrics->ip) ? $server->metrics->ip : 0;
 									$host = $server->host;
 									$cpuColor    = ($cpu >=0 && $cpu <= 50) ? "primary" : ( ($cpu > 50 && $cpu <= 75) ?  "warning" : "danger" );  
 									$memoryColor = ($memory >=0 && $memory <= 50) ? "primary" : ( ($memory > 50 && $memory <= 75) ?  "warning" : "danger" );
 									$diskColor   = ($disk >=0 && $disk <= 50) ? "primary" : ( ($disk > 50 && $disk <= 75) ?  "warning" : "danger" );
 
 									$connClass =  "badge badge-" . ( isset($server->connections) ? $server->connections : "info");
+									$ipClass =  "badge badge-" . ( isset($server->ip) ? $server->ip : "info");
 							?>
 
 							<tr>
 							    <td>
 							    	<div class="tooltip-primary" data-original-title="<?php echo $description . " / " . $host ; ?>" 
 							      	   data-placement="top" data-toggle="tooltip" data-trigger="click"> 
-							    		<?php echo $server->name . "  <span class='$connClass'>" . $connections . "</span>" ; ?>
+							    		<?php echo $server->name . 
+							    		        " <span class='$ipClass' title='Ip'>" . $ip . "</span>" .
+							    				" <span class='$connClass' title='Connections'>" . $connections . "</span>" 
+							    		; ?>
 							    	</div>
 							    </td>
 							    <td>

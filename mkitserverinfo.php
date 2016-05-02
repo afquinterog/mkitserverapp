@@ -28,8 +28,9 @@ $mem = $mem[1];
 $cpu    = $_GET["cpu"];
 $server = $_GET["server"];
 $con    = isset($_GET["con"]) ? $_GET["con"] : "0";
+$con    = isset($_GET["ip"]) ? $_GET["ip"] : "0";
 
-echo " $disk - $mem - $cpu - $con <br/>";
+echo " $disk - $mem - $cpu - $con - $ip <br/>";
 
 
 ///$server = 1;
@@ -37,8 +38,8 @@ echo " $disk - $mem - $cpu - $con <br/>";
 //$memory = "50";
 //$disk = "50";
 
-$sql = "INSERT INTO metrics (server, cpu, memory, disk, connections, date)
-VALUES ('$server', '$cpu', '$mem', '$disk', $con , now() )";
+$sql = "INSERT INTO metrics (server, cpu, memory, disk, connections, ip, date)
+VALUES ('$server', '$cpu', '$mem', '$disk', $con , $ip , now() )";
 
 if ($conn->query($sql) === TRUE) {
     echo "New record created successfully";
