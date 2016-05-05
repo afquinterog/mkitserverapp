@@ -28,7 +28,7 @@ $mem = $mem[1];
 $cpu    = $_GET["cpu"];
 $server = $_GET["server"];
 $con    = isset($_GET["con"]) ? $_GET["con"] : "0";
-$con    = isset($_GET["ip"]) ? $_GET["ip"] : "0";
+$ip    = isset($_GET["ip"]) ? $_GET["ip"] : "0";
 
 echo " $disk - $mem - $cpu - $con - $ip <br/>";
 
