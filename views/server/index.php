@@ -34,17 +34,19 @@
 						<tbody>
 							<?php
 								foreach($servers as $server): 					
-									$cpu    = isset($server->metrics->cpu) ? $server->metrics->cpu : 0 ;
-									$memory = isset($server->metrics->memory) ? $server->metrics->memory : 0 ;
-									$disk   = isset($server->metrics->disk) ? $server->metrics->disk : 0 ;
-									$date   = isset($server->metrics->date) ? $server->metrics->date : "";
-									$date2   = isset($server->metrics->date) ? $server->metrics->date2 : "";
+									$cpu        = isset($server->metrics->cpu) ? $server->metrics->cpu : 0 ;
+									$memory     = isset($server->metrics->memory) ? $server->metrics->memory : 0 ;
+									$memoryReal = isset($server->metrics->memory_cache) ? $server->metrics->memory_cache : 0 ;
+									$disk       = isset($server->metrics->disk) ? $server->metrics->disk : 0 ;
+									$date       = isset($server->metrics->date) ? $server->metrics->date : "";
+									$date2      = isset($server->metrics->date) ? $server->metrics->date2 : "";
 									$description = $server->description;
 									$connections = isset($server->metrics->connections) ? $server->metrics->connections : 0;
 									$ip = isset($server->metrics->ip) ? $server->metrics->ip : 0;
 									$host = $server->host;
 									$cpuColor    = ($cpu >=0 && $cpu <= 50) ? "primary" : ( ($cpu > 50 && $cpu <= 75) ?  "warning" : "danger" );  
 									$memoryColor = ($memory >=0 && $memory <= 50) ? "primary" : ( ($memory > 50 && $memory <= 75) ?  "warning" : "danger" );
+									$memoryRealColor = ($memoryReal >=0 && $memoryReal <= 50) ? "primary" : ( ($memoryReal > 50 && $memoryReal <= 75) ?  "warning" : "danger" );
 									$diskColor   = ($disk >=0 && $disk <= 50) ? "primary" : ( ($disk > 50 && $disk <= 75) ?  "warning" : "danger" );
 
 									$connClass =  "badge badge-" . ( isset($server->connections) ? $server->connections : "info");
@@ -70,10 +72,17 @@
 							    </td>
 							    <td>
 							      <div class="progress progress-xs margin-vertical-10 tooltip-primary" 
-							      	   data-original-title="<?php echo $memory; ?>%" 
+							      	   data-original-title="Memory used: <?php echo $memoryReal; ?>%" 
+							      	   data-placement="top" data-toggle="tooltip">
+							        <div style="width: <?php echo $memoryReal; ?>%" class="progress-bar progress-bar-<?php echo $memoryRealColor; ?>"></div>
+							      </div>
+
+							      <div class="progress progress-xs margin-vertical-10 tooltip-primary" 
+							      	   data-original-title="Memory used + buffer + cache: <?php echo $memory; ?>%" 
 							      	   data-placement="top" data-toggle="tooltip">
 							        <div style="width: <?php echo $memory; ?>%" class="progress-bar progress-bar-<?php echo $memoryColor; ?>"></div>
 							      </div>
+
 							    </td>
 							    <td>
 							      <div class="progress progress-xs margin-vertical-10 tooltip-primary" 
